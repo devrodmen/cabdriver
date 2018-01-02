@@ -1,0 +1,8 @@
+{
+  "name": "remisse21.movil",
+  "app_id": "905a45ea",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
