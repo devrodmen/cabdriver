@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Regresar</button>
+    </ion-buttons>
+
+    <ion-title>
+      Reservas
+    </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div id="map_canvas">{{error}}</div>
+</ion-content>
+
+<ion-footer>
+  <ion-grid *ngIf="estado == 4">
+    <ion-row style="text-align:center;">
+      <ion-col><button ion-button full (click)="confirm()">Finalizar Viaje</button></ion-col>
+      <ion-col><button ion-button full (click)="detalles()">Ver detalles</button></ion-col>
+    </ion-row>
+    <ion-row style="text-align:center;">
+      <ion-col><button ion-button full (click)="notificarLlegada()">Notificar llegada</button></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

@@ -1,0 +1,33 @@
+<ion-content [ngStyle]="{'background-image': 'url(' + backgroundImage +')'}">
+	<div class="login-container">
+	  <img class="logo" src="./assets/logo-remisse.png" />
+	  
+	  <!--*********** Form ***********-->
+	  <form #loginForm="ngForm" novalidate>
+		<ion-item>
+				<ion-label floating>Usuario</ion-label>
+			<ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
+				required>
+			</ion-input>
+		</ion-item>
+		<p ion-text [hidden]="username.valid || submitted == false" color="danger" padding-left>
+			Usuario es necesario
+		</p>
+		<ion-item>
+			<ion-label floating>Contraseña</ion-label>
+			<ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
+			</ion-input>
+		</ion-item>
+		<p ion-text [hidden]="password.valid || submitted == false" color="danger" padding-left>
+			Contraseña es necesario
+		</p>
+
+
+		<ion-row responsive-sm>
+			<ion-col>
+				<button ion-button (click)="onLogin(loginForm)" type="submit" block color="blue2">Iniciar Sesión</button>
+			</ion-col>
+		</ion-row>
+	</form>
+	</div>
+  
