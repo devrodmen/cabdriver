@@ -1,4 +1,4 @@
-  import { Component, ViewChild, ElementRef } from '@angular/core';
+  import { Component } from '@angular/core';
   import { IonicPage, NavController, NavParams, AlertController, ModalController, ViewController } from 'ionic-angular';
   import { OnInit } from '@angular/core';
 

@@ -29,7 +29,9 @@ import { LoginProvider } from '../providers/login';
 import { ReservaProvider } from '../providers/reserva/reserva';
 import { MessagePageModule } from '../pages/message/message.module';
 import { LoginPageModule } from '../pages/login/login.module';
-
+import { PerfilPageModule } from '../pages/perfil/perfil.module';
+import { InfoPageModule } from '../pages/info/info.module';
+import { TabsPageModule } from '../pages/tabs/tabs.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,10 @@ import { LoginPageModule } from '../pages/login/login.module';
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     MessagePageModule,
-    LoginPageModule
+    LoginPageModule,
+    PerfilPageModule,
+    InfoPageModule,
+    TabsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

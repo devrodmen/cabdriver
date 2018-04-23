@@ -62,10 +62,10 @@ export class MyApp {
       me.splashScreen.hide();
       var notificationOpenedCallback = function(json) {
         let jsonData = json["notification"]["payload"]["additionalData"];
-        let idreserva = jsonData["idreserva"];
+        //let idreserva = jsonData["idreserva"];
         let idmovil = jsonData["idmovil"];
         let estado = jsonData["estado"];
-        let tipo = jsonData["tipo"];
+        //let tipo = jsonData["tipo"];
         //if(tipo == "asignar") {
           let obj = {
             idmovil: idmovil,
