@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, Refresher, ToastController } from 'ionic-angular';
+import { AlertController, IonicPage, NavController, NavParams, ModalController, Refresher, ToastController, LoadingController, FabContainer, ItemSliding } from 'ionic-angular';
 
 import { LoginProvider } from '../../providers/login';
 import { ReservaProvider } from '../../providers/reserva/reserva';
@@ -7,6 +7,8 @@ import { ReservaProvider } from '../../providers/reserva/reserva';
 import { ConferenceData } from '../../providers/conference-data';
 
 import { PerfilPage } from '../../pages/perfil/perfil';
+
+import { UserData } from '../../providers/user-data';
 
 /**
  * Generated class for the TabsPage page.
@@ -27,6 +29,7 @@ export class TabsPage {
 	excludeTracks: any = [];
 	shownSessions: any = [];
 	groups: any = [];
+
 	confDate: string;
 	reservas: any = [];
 
@@ -37,7 +40,10 @@ export class TabsPage {
 	  	public toastCtrl: ToastController,
 	  	public reservaProvider:ReservaProvider,
 	  	public modalCtrl: ModalController,
-	  	public confData: ConferenceData
+	  	public confData: ConferenceData,
+	  	public loadingCtrl: LoadingController,
+	  	public alertCtrl: AlertController,
+	  	public user: UserData
 	  	) {
 		let me = this;
 	    me.getIdMovil().then((idmovil) => {
@@ -48,6 +54,10 @@ export class TabsPage {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad TabsPage');
+	}
+
+	ionViewWillLeave(){
+	    this.updateSchedule();
 	}
 
 	getIdMovil() {
@@ -98,24 +108,92 @@ export class TabsPage {
 	    });
 	}
 
+	addFavorite(slidingItem: ItemSliding, sessionData: any) {
+
+    if (this.user.hasFavorite(sessionData.name)) {
+      // woops, they already favorited it! What shall we do!?
+      // prompt them to remove it
+      this.removeFavorite(slidingItem, sessionData, 'Favorite already added');
+    } else {
+      // remember this session as a user favorite
+      this.user.addFavorite(sessionData.name);
+
+      // create an alert instance
+      let alert = this.alertCtrl.create({
+        title: 'Favorite Added',
+        buttons: [{
+          text: 'OK',
+          handler: () => {
+            // close the sliding item
+            slidingItem.close();
+          }
+        }]
+      });
+      // now present the alert on top of all other content
+      alert.present();
+    }
+
+  }
+
+	removeFavorite(slidingItem: ItemSliding, sessionData: any, title: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      message: 'Would you like to remove this session from your favorites?',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            // they clicked the cancel button, do not remove the session
+            // close the sliding item and hide the option buttons
+            slidingItem.close();
+          }
+        },
+        {
+          text: 'Remove',
+          handler: () => {
+            // they want to remove this session from their favorites
+            this.user.removeFavorite(sessionData.name);
+            this.updateSchedule();
+
+            // close the sliding item and hide the option buttons
+            slidingItem.close();
+          }
+        }
+      ]
+    });
+    // now present the alert on top of all other content
+    alert.present();
+  }
+
+  openSocial(network: string, fab: FabContainer) {
+    let loading = this.loadingCtrl.create({
+      content: `Posting to ${network}`,
+      duration: (Math.random() * 1000) + 500
+    });
+    loading.onWillDismiss(() => {
+      fab.close();
+    });
+    loading.present();
+  }
+
 	doRefresh(refresher: Refresher) {
 		let me = this;
     	this.confData.getTimeline(this.dayIndex, this.queryText, this.excludeTracks, this.segment).subscribe((data: any) => {
-      this.shownSessions = data.shownSessions;
-      this.groups = data.groups;
+      	this.shownSessions = data.shownSessions;
+      	this.groups = data.groups;
 
-      // simulate a network request that would take longer
-      // than just pulling from out local json file
-      setTimeout(() => {
-        refresher.complete();
-        me.updateSchedule();
+		// simulate a network request that would take longer
+		// than just pulling from out local json file
+		setTimeout(() => {
+			me.updateSchedule();
+			refresher.complete();
 
-        const toast = this.toastCtrl.create({
-          message: 'Reservas actualizadas.',
-          duration: 3000
-        });
-        toast.present();
-      }, 1000);
+			const toast = this.toastCtrl.create({
+			  message: 'Reservas actualizadas.',
+			  duration: 3000
+			});
+			toast.present();
+		}, 1000);
     });
   }
 }

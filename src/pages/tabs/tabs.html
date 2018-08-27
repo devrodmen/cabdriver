@@ -5,13 +5,18 @@
   Ionic pages and navigation.
 -->
 <ion-header>
+  <ion-navbar no-border-bottom>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
 
-  <ion-navbar>
-    <ion-title>Reservas</ion-title>
+    <ion-segment [(ngModel)]="segment" (ionChange)="updateSchedule()">
+      <ion-segment-button value="all">
+        Reservas
+      </ion-segment-button>
+    </ion-segment>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
